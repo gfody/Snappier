@@ -153,7 +153,7 @@ namespace Snappier
         /// <inheritdoc />
         public override int Read(byte[] buffer, int offset, int count) => ReadCore(buffer.AsSpan(offset, count));
 
-        #if !NETSTANDARD2_0
+        #if !(NETFRAMEWORK || NETSTANDARD2_0)
         /// <inheritdoc />
         public override int Read(Span<byte> buffer) => ReadCore(buffer);
         #endif
@@ -178,7 +178,7 @@ namespace Snappier
                 }
 
                 Debug.Assert(_buffer != null);
-                #if !NETSTANDARD2_0
+                #if !(NETFRAMEWORK || NETSTANDARD2_0)
                 int bytes = _stream.Read(_buffer);
                 #else
                 int bytes = _stream.Read(_buffer, 0, _buffer.Length);
@@ -203,7 +203,7 @@ namespace Snappier
             CancellationToken cancellationToken) =>
             ReadAsyncCore(buffer.AsMemory(offset, count), cancellationToken).AsTask();
 
-        #if !NETSTANDARD2_0
+        #if !(NETFRAMEWORK || NETSTANDARD2_0)
         /// <inheritdoc />
         public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = new CancellationToken()) =>
             ReadAsyncCore(buffer, cancellationToken);
@@ -242,7 +242,7 @@ namespace Snappier
                     return new ValueTask<int>(bytesRead);
                 }
 
-                #if !NETSTANDARD2_0
+                #if !(NETFRAMEWORK || NETSTANDARD2_0)
                 ValueTask<int> readTask = _stream.ReadAsync(_buffer, cancellationToken);
                 #else
                 ValueTask<int> readTask = new ValueTask<int>(_stream.ReadAsync(_buffer, 0, _buffer.Length, cancellationToken));
@@ -305,7 +305,7 @@ namespace Snappier
                     {
                         // We could have read in head information and didn't get any data.
                         // Read from the base stream again.
-                        #if !NETSTANDARD2_0
+                        #if !(NETFRAMEWORK || NETSTANDARD2_0)
                         readTask = _stream.ReadAsync(_buffer, cancellationToken);
                         #else
                         readTask = new ValueTask<int>(_stream.ReadAsync(_buffer, 0, _buffer.Length, cancellationToken));
@@ -323,7 +323,7 @@ namespace Snappier
         public override void Write(byte[] buffer, int offset, int count) =>
             WriteCore(buffer.AsSpan(offset, count));
 
-        #if !NETSTANDARD2_0
+        #if !(NETFRAMEWORK || NETSTANDARD2_0)
         /// <inheritdoc />
         public override void Write(ReadOnlySpan<byte> buffer) => WriteCore(buffer);
         #endif
@@ -343,7 +343,7 @@ namespace Snappier
         public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) =>
             WriteAsyncCore(buffer.AsMemory(offset, count), cancellationToken).AsTask();
 
-#if !NETSTANDARD2_0
+#if !(NETFRAMEWORK || NETSTANDARD2_0)
         /// <inheritdoc />
         public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer,
             CancellationToken cancellationToken = default) =>
@@ -461,7 +461,7 @@ namespace Snappier
             }
         }
 
-        #if !NETSTANDARD2_0
+        #if !(NETFRAMEWORK || NETSTANDARD2_0)
         /// <inheritdoc />
         public override async ValueTask DisposeAsync()
         {

@@ -4,7 +4,7 @@ using System.Buffers.Binary;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-#if NETSTANDARD2_0
+#if NETFRAMEWORK || NETSTANDARD2_0
 using System.Runtime.InteropServices;
 #endif
 using System.Threading;
